@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:sec="http://www.springframework.org/schema/security" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+		
+	<import resource="classpath:spring/spring-transaction-mybatis.xml" />
+	
+	<aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true" />
+	
+	<aop:config expose-proxy="true">
+		<!--execution第一个星号代表任何返回类型，第二个星号代表com.lb.service下的所有包，第三个星号代表所有方法，括号中的两个点代表任何参数 -->
+		<aop:pointcut id="servicePointcut" expression="execution(public * com.ccby..service..*.*(..))" /> 
+		<aop:advisor advice-ref="mybatisAdvice" pointcut-ref="servicePointcut" />
+		
+	</aop:config>
+</beans>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:sec="http://www.springframework.org/schema/security" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/jdbc 
+		http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		">
+
+	<bean id="myBatisDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		
+		<!-- 启用池操作，每个connection独享preparedstatements池 -->
+		<!-- <property name="poolPreparedStatements" value="false" /> -->
+    	<!-- <property name="maxOpenPreparedStatements" value="10" /> -->
+    	 
+<!--     	<property name="initialSize" value="200" />  -->
+<!--     	<property name="maxActive" value="400" />  -->
+<!--     	<property name="maxIdle" value="420" />  -->
+<!--     	<property name="minIdle" value="400" /> -->
+    	
+    	<property name="initialSize" value="20" /> 
+    	<property name="maxActive" value="40" /> 
+    	<property name="maxIdle" value="20" /> 
+    	<property name="minIdle" value="40" /> 
+    	<property name="maxWait" value="60000" />
+    	<property name="removeAbandonedTimeout" value="180" />
+    	<property name="validationQuery" value="SELECT 1" />
+    	<property name="testOnBorrow" value="true"/>
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="myBatisDataSource" />
+		<property name="typeAliasesPackage" value="com.ccby.**.module.**" />
+		<property name="typeHandlersPackage" value="com.ccby.core.base.typehandler;com.ccby.api.core.typehandler;com.ccby.trade.core.typehandler" />
+<!-- 		<property name="typeHandlers"> -->
+<!-- 			<array> -->
+<!-- 				<bean class="com.ccby.core.base.typehandler.DataDictionaryTypeHandler"/> -->
+<!-- 			</array> -->
+<!-- 		</property> -->
+		<property name="mapperLocations" value="classpath*:mybatis/**/*Mapper.xml" />
+		<property name="configurationProperties">
+			<props>
+				<prop key="logImpl">LOG4J</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="defaultDAO" class="com.ccby.core.base.dao.DefaultDAO">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+<!-- 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+<!-- 		<property name="basePackage" value="**.dao.**" /> -->
+<!-- 	</bean> -->
+	
+<!-- 	<jdbc:initialize-database data-source="dataSource" ignore-failures="NONE" enabled="false"> -->
+<!-- 		<jdbc:script encoding="UTF-8" location="classpath:sql/mysql.sql"/> -->
+<!-- 	</jdbc:initialize-database> -->
+</beans>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="tv.aniu.api.niukeme.core.dao.DefaultDAO">
+	
+	<!-- 保存支持的保险公司 -->
+	<insert id="saveJdyCompany" parameterType="com.ccby.module.insurance.InsuranceCompanyImpl"
+			useGeneratedKeys="true"  keyProperty="id">
+		<selectKey resultType="java.lang.Long" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		INSERT INTO `ccby_insurance_company`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name!= null">`name`,</if>
+			<if test="originalUrl!= null">`original_url`,</if>
+			<if test="detailUrl!= null">`detail_url`,</if>
+			<if test="status!= null">`status`,</if>
+			<if test="autoQuote!= null">`auto_quote`,</if>
+			<if test="autoQuoteTag!= null">`auto_quote_tag`,</if>
+			<if test="autoSended!= null">`auto_sended`,</if>
+			<if test="isSupportRenewal!= null">`is_support_renewal`,</if>
+			<if test="isRequireIdCheck!= null">`is_require_id_check`,</if>
+			<if test="isSupportIdCode!= null">`is_support_id_code`,</if>
+			<if test="icChannel!= null">`ic_channel`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">#{name},</if>
+			<if test="originalUrl != null">#{originalUrl},</if>
+			<if test="detailUrl != null">#{detailUrl},</if>
+			<if test="status != null">#{status},</if>
+			<if test="autoQuote != null">#{autoQuote},</if>
+			<if test="autoQuoteTag != null">#{autoQuoteTag},</if>
+			<if test="autoSended != null">#{autoSended},</if>
+			<if test="isSupportRenewal != null">#{isSupportRenewal},</if>
+			<if test="isRequireIdCheck != null">#{isRequireIdCheck},</if>
+			<if test="isSupportIdCode != null">#{isSupportIdCode},</if>
+			<if test="icChannel != null">#{icChannel},</if>
+		</trim>
+	</insert>
+	
+	<!-- 保存保险公司支持的销售渠道 -->
+	<insert id="saveSalesChannel" parameterType="com.ccby.yobee.model.saleschannel.SalesChannelImpl">
+		INSERT INTO `yobee_jdy_sales_channel`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name!= null">`name`,</if>
+			<if test="code!= null">`code`,</if>
+			<if test="icId!= null">`ic_id`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">#{name},</if>
+			<if test="code != null">#{code},</if>
+			<if test="icId != null">#{icId},</if>
+		</trim>
+	</insert>
+	
+	<!-- 保存保险公司需要的账号字段 -->
+	<insert id="saveRequireAccountFields" parameterType="com.ccby.yobee.model.requireaccountfields.RequireAccountFieldsImpl">
+		INSERT INTO `yobee_jdy_account_fields`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name!= null">`name`,</if>
+			<if test="text!= null">`text`,</if>
+			<if test="type!= null">`type`,</if>
+			<if test="description!= null">`description`,</if>
+			<if test="required!=null">`required`,</if>
+			<if test="loginRequired!=null">`login_required`,</if>
+			<if test="allowNonAscii!=null">`allow_non_ascii`,</if>
+			<if test="order!= null">`order`,</if>
+			<if test="icId!= null">`ic_id`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">#{name},</if>
+			<if test="text != null">#{text},</if>
+			<if test="type != null">#{type},</if>
+			<if test="description != null">#{description},</if>
+			<if test="required !=null">#{required},</if>
+			<if test="loginRequired !=null">#{loginRequired},</if>
+			<if test="allowNonAscii !=null">#{allowNonAscii},</if>
+			<if test="order != null">#{order},</if>
+			<if test="icId != null">#{icId},</if>
+		</trim>
+	</insert>
+	
+	<!-- 保存车辆元数据 -->
+	<insert id="saveVehicle" parameterType="com.ccby.yobee.model.vehicle.VehicleImpl">
+		INSERT INTO `yobee_jdy_vehicle`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="type!= null">`type`,</if>
+			<if test="code!= null">`code`,</if>
+			<if test="name!= null">`name`,</if>
+			<if test="order!= null">`order`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="type != null">#{type},</if>
+			<if test="code != null">#{code},</if>
+			<if test="name != null">#{name},</if>
+			<if test="order != null">#{order},</if>
+		</trim>
+	</insert>
+	
+	<!-- 保存支持的险种 -->
+	<insert id="saveCoverages" parameterType="com.ccby.yobee.model.coverages.CoveragesImpl">
+		INSERT INTO `yobee_jdy_coverages`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="type!= null">`type`,</if>
+			<if test="code!= null">`code`,</if>
+			<if test="name!= null">`name`,</if>
+			<if test="order!= null">`order`,</if>
+			<if test="description!= null">`description`,</if>
+			<if test="amountType!=null">`amount_type`,</if>
+			<if test="defaultAmount!=null">`default_amount`,</if>
+			<if test="isSupportExempt!=null">`is_support_exempt`,</if>
+			<if test="isSupportNonPassenger!=null">`is_support_non_passenger`,</if>
+			<if test="dependency!=null">`dependency`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="type != null">#{type},</if>
+			<if test="code != null">#{code},</if>
+			<if test="name != null">#{name},</if>
+			<if test="order != null">#{order},</if>
+			<if test="description != null">#{description},</if>
+			<if test="amountType !=null">#{amountType},</if>
+			<if test="defaultAmount !=null">#{defaultAmount},</if>
+			<if test="isSupportExempt !=null">#{isSupportExempt},</if>
+			<if test="isSupportNonPassenger !=null">#{isSupportNonPassenger},</if>
+			<if test="dependency !=null">#{dependency},</if>
+		</trim>
+	</insert>
+	
+	<!-- 保存保险公司支持的销售渠道 -->
+	<insert id="savePolicyCompanyAccount" parameterType="com.ccby.dto.yobee.ICAccount">
+		INSERT INTO `yobee_jdy_account`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="account_id != null">`account_id`,</if>
+			<if test="ic_code != null">`ic_code`,</if>
+			<if test="prov_code != null">`prov_code`,</if>
+			<if test="city_code != null">`city_code`,</if>
+			<if test="is_default != null">`is_default`,</if>
+			<if test="user != null">`user`,</if>
+			<if test="pass != null">`pass`,</if>
+			<if test="info != null">`info`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="account_id != null">#{account_id},</if>
+			<if test="ic_code != null">#{ic_code},</if>
+			<if test="prov_code != null">#{prov_code},</if>
+			<if test="city_code != null">#{city_code},</if>
+			<if test="is_default != null">#{is_default},</if>
+			<if test="user != null">#{user},</if>
+			<if test="pass != null">#{pass},</if>
+			<if test="info != null">#{info},</if>
+		</trim>
+	</insert>
+	
+	<select id="getPolicyAccount" resultType="com.ccby.dto.yobee.ICAccount" parameterType="java.util.Map">
+		select * from `yobee_jdy_account` 
+		<where>
+			<if test="cityCode != null"> and `city_code` = #{cityCode}</if>
+			<if test="icCode != null"> and `ic_code` = #{icCode}</if>
+		</where>
+	</select>
+	
+	<delete id="deleteAllPolicyAccount">
+		DELETE FROM yobee_jdy_account;
+	</delete>
+	
+	<delete id="deleteInsuranceCompany">
+		DELETE FROM ccby_insurance_company WHERE ic_channel = 'yobee';
+	</delete>
+	
+	<delete id="deleteSalesChannel">
+		DELETE FROM yobee_jdy_sales_channel;
+	</delete>
+	
+	<delete id="deleteRequireAccountFields">
+		DELETE FROM yobee_jdy_account_fields;
+	</delete>
+	
+	<delete id="deleteVehicle">
+		DELETE FROM yobee_jdy_vehicle;
+	</delete>
+	
+	<delete id="deleteCoverages">
+		DELETE FROM yobee_jdy_coverages;
+	</delete>
+</mapper>

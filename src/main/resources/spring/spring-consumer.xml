@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://code.alibabatech.com/schema/dubbo 
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 消费端应用定义 -->
+	<!-- <dubbo:application name="yobee-consumer" owner="programer" organization="dubbox" /> -->
+	
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="${zookeeper}" file="${user.dir}/dubbo-regist/yobee-consumer.properties"/>
+	
+	<!-- 接口声明 -->
+	<dubbo:reference id="insuranceServiceApi" interface="com.ccby.api.base.service.InsuranceService" protocol="dubbo" lazy="true" check="false" timeout="2000" group="API" url="dubbo://localhost:20881/com.ccby.api.base.service.InsuranceService?serialization=kryo">
+		<!-- 保存报价结果使用异步方式 -->
+		<dubbo:method name="saveInsuranceProudctByYobee" async="true" />
+		<dubbo:method name="updateInsuranceVehicleType" async="true" />
+	</dubbo:reference>
+	
+	<dubbo:reference id="insuranceLastQuoteService" interface="com.ccby.api.base.service.InsuranceLastQuoteService" protocol="dubbo" lazy="true" check="false" timeout="5000" connections="3" group="API" url="dubbo://localhost:20881/com.ccby.api.base.service.InsuranceLastQuoteService?serialization=kryo">
+		<!-- 保存上年投保信息，使用异步 -->
+		<dubbo:method name="saveInsuranceCarAndLastQuote" async="true" />
+		<dubbo:method name="saveInsuranceLastQuote" async="true" />
+	</dubbo:reference>
+	
+	<dubbo:reference id="userCarService" interface="com.ccby.api.base.service.UserCarService" protocol="dubbo" lazy="true" check="false" timeout="2000" group="API" url="dubbo://localhost:20881/com.ccby.api.base.service.UserCarService?serialization=kryo">
+	</dubbo:reference>
+	<dubbo:reference id="insuranceCompanyService" interface="com.ccby.api.base.service.InsuranceCompanyService" protocol="dubbo" lazy="true" check="false" timeout="2000" group="API" url="dubbo://localhost:20881/com.ccby.api.base.service.InsuranceCompanyService?serialization=kryo">
+	</dubbo:reference>
+	<dubbo:reference id="productService" interface="com.ccby.api.base.service.ProductService" protocol="dubbo" lazy="true" check="false" timeout="2000" group="API" url="dubbo://localhost:20881/com.ccby.api.base.service.ProductService?serialization=kryo">
+	</dubbo:reference>
+	
+<!-- 	<dubbo:reference id="insuranceServiceApi" interface="com.ccby.api.base.service.InsuranceService" timeout="2000" connections="3" group="API" url="dubbo://localhost:20880" /> -->
+</beans>

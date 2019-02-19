@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://code.alibabatech.com/schema/dubbo 
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+		">
+
+	<dubbo:annotation package="com.ccby.api.base.service,com.ccby.api.yobee" />
+	
+	<dubbo:protocol name="rest" port="81" threads="500"
+		contextpath="/" server="tomcat" accepts="500"/>
+
+	<!-- Provider信息 -->
+	<dubbo:application name="yobee-server" owner="programer"
+		organization="dubbox" />
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="${zookeeper}" file="${user.dir}/dubbo-regist/yobee-provider.properties"/>
+
+	<!-- 添加监控到zookeeper -->
+	<dubbo:monitor protocol="registry" />
+
+	<!-- 使用kryo方式序列化消息 -->
+	<dubbo:protocol name="dubbo" serialization="kryo" port="-1" accepts="1000"/>
+	
+	<!-- 定义的rest协议service实现类 -->
+	<bean id="restYobeeService" class="com.ccby.yobee.service.impl.RestYobeeServiceImpl"></bean>
+		
+	<!-- 接口定义，接口group定义为：YOBEE -->
+    <dubbo:service interface="com.ccby.api.yobee.service.YobeeService" protocol="dubbo" ref="yobeeService"  group="YOBEE" />
+    <dubbo:service interface="com.ccby.api.yobee.service.RestYobeeService" protocol="rest" ref="restYobeeService"  group="YOBEE" />
+	
+</beans>

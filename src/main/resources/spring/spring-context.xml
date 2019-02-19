@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+	<!-- 启用spring mvc 注解 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.ccby.yobee" />
+
+	<context:property-placeholder order="0" ignore-unresolvable="true" properties-ref="propertiesConfig" />
+
+	<bean id="SpringContextUtil" class="com.ccby.core.applicationcontext.SpringContextUtil" />
+
+	<bean id="propertiesConfig" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath*:/properties/core.properties</value>
+				<value>classpath*:/properties/yobee.properties</value>
+				<value>classpath*:/properties/application.properties</value>
+				<value>classpath*:/properties/ccby-api.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<import resource="classpath:spring/spring-mybatis.xml" />
+	<import resource="classpath:spring/spring-redis.xml" />
+	<import resource="classpath:spring/spring-transaction.xml" />
+	<import resource="classpath:spring/spring-provider.xml" />
+	<import resource="classpath:spring/spring-consumer.xml" />
+
+</beans>
+
